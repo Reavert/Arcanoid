@@ -1,4 +1,3 @@
-using System;
 using Assets.Models;
 using UnityEngine;
 
@@ -24,7 +23,7 @@ public class Block : MonoBehaviour
                 return;
             }
 
-            _condition = Math.Clamp(value, 0, _conditionSprites.Length - 1);
+            _condition = Mathf.Clamp(value, 0, _conditionSprites.Length - 1);
             _spriteRenderer.sprite = _conditionSprites[_condition];
         }
     }
