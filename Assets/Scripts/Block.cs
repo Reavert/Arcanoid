@@ -6,8 +6,7 @@ public class Block : MonoBehaviour
 {
     private int _condition;
 
-    [SerializeField]
-    private Sprite[] _conditionSprites;
+    [SerializeField] private Sprite[] _conditionSprites;
 
     private SpriteRenderer _spriteRenderer;
 

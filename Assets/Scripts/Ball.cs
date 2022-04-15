@@ -11,7 +11,6 @@ public class Ball : MonoBehaviour
     private ScreenHelper _screenHelper;
     private Vector2 _halfBound;
 
-    public bool IsFallen { get; private set; }
 
     public delegate void FellHandler();
     public FellHandler Fell;
@@ -23,8 +22,6 @@ public class Ball : MonoBehaviour
 
     void Awake()
     {
-        IsFallen = false;
-
         _screenHelper = FindObjectOfType<ScreenHelper>();
         _rigidbody = GetComponent<Rigidbody2D>();
 
@@ -69,10 +66,7 @@ public class Ball : MonoBehaviour
 
         if (transform.position.y < -_screenHelper.ScreenDimension.y)
         {
-            if (!IsFallen)
-            {
-                Fell?.Invoke();
-            }
+            Fell?.Invoke();
         }
     }
 }

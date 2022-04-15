@@ -11,9 +11,9 @@ public class Game : MonoBehaviour
 
     private LevelManager _levelManager;
 
-    public Action GameOver;
-    public Action GameWon;
-    public Action LevelLoaded;
+    public event Action GameOver;
+    public event Action GameWon;
+    public event Action LevelLoaded;
 
     void Start()
     {

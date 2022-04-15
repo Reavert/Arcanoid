@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using Assets.Models;
@@ -7,14 +8,11 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Block _blockPrefab;
 
-    [HideInInspector] public List<Block> Blocks;
+    private List<Block> _blocks;
     private ScreenHelper _screenHelper;
 
-    public delegate void LevelCompletedHandler();
-    public event LevelCompletedHandler Completed;
-
-    public delegate void LevelFailedHandler();
-    public event LevelFailedHandler Failed;
+    public event Action Completed;
+    public event Action Failed;
 
     private Ball _ball;
     private Platform _platform;
@@ -28,7 +26,7 @@ public class LevelManager : MonoBehaviour
         Events.BlockDestroyed += OnBlockDestroyed;
         _ball.Fell += OnFell;
 
-        Blocks = new List<Block>();
+        _blocks = new List<Block>();
     }
 
     private void OnFell()
@@ -54,7 +52,7 @@ public class LevelManager : MonoBehaviour
 
     private void OnBlockDestroyed(Block block)
     {
-        if (!Blocks.Any(b => b.gameObject.activeInHierarchy))
+        if (!_blocks.Any(b => b.gameObject.activeInHierarchy))
         {
             Completed?.Invoke();
         }
@@ -62,12 +60,12 @@ public class LevelManager : MonoBehaviour
 
     public void Build(int[,] blocks)
     {
-        foreach (Block block in Blocks)
+        foreach (Block block in _blocks)
         {
             Destroy(block.gameObject);
         }
 
-        Blocks.Clear();
+        _blocks.Clear();
 
         int rowsCount = blocks.GetLength(0);
         int columnsCount = blocks.GetLength(1);
@@ -90,7 +88,8 @@ public class LevelManager : MonoBehaviour
 
                 newBlock.transform.localScale = new Vector3(blockSize, blockSize, 1.0f);
                 newBlock.Condition = blocks[row, column] - 1;
-                Blocks.Add(newBlock);
+
+                _blocks.Add(newBlock);
             }
         }
     }

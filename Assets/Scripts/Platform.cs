@@ -3,10 +3,9 @@ using UnityEngine;
 [RequireComponent(typeof(SpriteRenderer))]
 public class Platform : MonoBehaviour
 {
-    public float BottomOffset;
+    [SerializeField] private float _bottomOffset;
 
-    [HideInInspector]
-    public float Size;
+    public float Size { get; private set; }
 
     private Vector3 _screenDimension;
     private float _halfSize;
@@ -24,6 +23,6 @@ public class Platform : MonoBehaviour
     {
         value = Mathf.Clamp(value, -_screenDimension.x + _halfSize, _screenDimension.x - _halfSize);
 
-        transform.position = new Vector3(value, -_screenDimension.y + BottomOffset);
+        transform.position = new Vector3(value, -_screenDimension.y + _bottomOffset);
     }
 }
