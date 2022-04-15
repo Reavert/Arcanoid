@@ -8,6 +8,10 @@ public class LevelManager : MonoBehaviour
 {
     [SerializeField] private Block _blockPrefab;
 
+    [SerializeField] 
+    [Range(0.0f, 1.0f)]
+    private float _maxBlockOccupation;
+
     private List<Block> _blocks;
     private ScreenHelper _screenHelper;
 
@@ -73,6 +77,11 @@ public class LevelManager : MonoBehaviour
         float xStep = _screenHelper.ScreenDimension.x * 2.0f / columnsCount;
         float blockSize = xStep / 2.0f;
 
+        float maxSize = _screenHelper.ScreenDimension.x * _maxBlockOccupation;
+        
+        blockSize = Mathf.Clamp(blockSize, 0.0f, maxSize);
+        float remainingSpace = _screenHelper.ScreenDimension.x - blockSize * columnsCount;
+
         for (int row = 0; row < rowsCount; row++)
         {
             for (int column = 0; column < columnsCount; column++)
@@ -83,8 +92,8 @@ public class LevelManager : MonoBehaviour
                 }
 
                 Block newBlock = Instantiate(_blockPrefab,
-                    new Vector3(column * xStep - _screenHelper.ScreenDimension.x + blockSize,
-                        -row * xStep + _screenHelper.ScreenDimension.y - blockSize), Quaternion.identity);
+                    new Vector3(column * (blockSize * 2f) - _screenHelper.ScreenDimension.x + blockSize + remainingSpace,
+                        -row * (blockSize * 2f) + _screenHelper.ScreenDimension.y - blockSize), Quaternion.identity);
 
                 newBlock.transform.localScale = new Vector3(blockSize, blockSize, 1.0f);
                 newBlock.Condition = blocks[row, column] - 1;
