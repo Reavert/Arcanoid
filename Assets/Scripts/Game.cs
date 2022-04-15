@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using Assets.Models;
 using UnityEngine;
@@ -10,8 +11,9 @@ public class Game : MonoBehaviour
 
     private LevelManager _levelManager;
 
-    [SerializeField] private GameObject _winLayout;
-    [SerializeField] private GameObject _loseLayout;
+    public Action GameOver;
+    public Action GameWon;
+    public Action LevelLoaded;
 
     void Start()
     {
@@ -32,7 +34,8 @@ public class Game : MonoBehaviour
 
     private void OnLevelFailed()
     {
-        _loseLayout.SetActive(true);
+        GameOver.Invoke();
+
         _levelManager.StopLevel();
     }
 
@@ -44,7 +47,8 @@ public class Game : MonoBehaviour
         }
         else
         {
-            _winLayout.SetActive(true);
+            GameWon.Invoke();
+
             _levelEnumerator = _levels.GetEnumerator();
             _levelEnumerator.MoveNext();
 
@@ -56,13 +60,12 @@ public class Game : MonoBehaviour
     {
         _levelManager.Build(_levelEnumerator.Current);
         _levelManager.StartLevel();
+
+        LevelLoaded.Invoke();
     }
 
     public void RestartLevel()
     {
-        _winLayout.SetActive(false);
-        _loseLayout.SetActive(false);
-
         LoadLevel();
     }
 

@@ -830,6 +830,7 @@ GameObject:
   - component: {fileID: 1054705960}
   - component: {fileID: 1054705961}
   - component: {fileID: 1054705962}
+  - component: {fileID: 1054705963}
   m_Layer: 0
   m_Name: Scripts
   m_TagString: Untagged
@@ -876,8 +877,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e9285e542b64154c9abd1be20e290f8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _winLayout: {fileID: 561495928}
-  _loseLayout: {fileID: 1456599596}
 --- !u!114 &1054705962
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -892,6 +891,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _blockPrefab: {fileID: 1087272667183300958, guid: d5eb0877e37cdb048808bd0480f0303f, type: 3}
   Blocks: []
+--- !u!114 &1054705963
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1054705958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cdf63c7715b154f43895a8a7a3844b79, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _winLayout: {fileID: 561495928}
+  _loseLayout: {fileID: 1456599596}
 --- !u!1 &1149641404
 GameObject:
   m_ObjectHideFlags: 0
