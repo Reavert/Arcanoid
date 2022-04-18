@@ -1,19 +1,28 @@
 using UnityEngine;
 
-public class UIController : MonoBehaviour
+public class UIController : Singleton<UIController>
 {
-    [SerializeField] private GameObject _winLayout;
-    [SerializeField] private GameObject _loseLayout;
+    [SerializeField] 
+    private GameObject _winLayout;
 
-    private Game _game;
+    [SerializeField] 
+    private GameObject _loseLayout;
 
-    void Awake()
+    protected override void Initialize()
+    { }
+
+    private void OnEnable()
     {
-        _game = FindObjectOfType<Game>();
+        Game.Instance.GameWon += OnGameWon;
+        Game.Instance.GameOver += OnGameOver;
+        Game.Instance.LevelLoaded += OnLevelLoaded;
+    }
 
-        _game.GameWon += OnGameWon;
-        _game.GameOver += OnGameOver;
-        _game.LevelLoaded += OnLevelLoaded;
+    private void OnDisable()
+    {
+        Game.Instance.GameWon -= OnGameWon;
+        Game.Instance.GameOver -= OnGameOver;
+        Game.Instance.LevelLoaded -= OnLevelLoaded;
     }
 
     private void OnGameWon()
@@ -29,12 +38,5 @@ public class UIController : MonoBehaviour
     {
         _winLayout.SetActive(false);
         _loseLayout.SetActive(false);
-    }
-
-    void OnDestroy()
-    {
-        _game.GameWon -= OnGameWon;
-        _game.GameOver -= OnGameOver;
-        _game.LevelLoaded -= OnLevelLoaded;
     }
 }

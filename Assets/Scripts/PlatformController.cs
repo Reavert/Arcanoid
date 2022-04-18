@@ -5,12 +5,12 @@ public class PlatformController : MonoBehaviour
 {
     private Platform _platform;
 
-    void Start()
+    private void Start()
     {
         _platform = GetComponent<Platform>();
     }
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButton(0))
         {

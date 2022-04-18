@@ -6,7 +6,8 @@ public class Block : MonoBehaviour
 {
     private int _condition;
 
-    [SerializeField] private Sprite[] _conditionSprites;
+    [SerializeField] 
+    private Sprite[] _conditionSprites;
 
     private SpriteRenderer _spriteRenderer;
 
@@ -27,12 +28,12 @@ public class Block : MonoBehaviour
         }
     }
 
-    void Awake()
+    private void Awake()
     {
         _spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    void OnCollisionEnter2D(Collision2D collision)
+    private void OnCollisionEnter2D(Collision2D collision)
     {
         Ball ball = collision.gameObject.GetComponent<Ball>();
 

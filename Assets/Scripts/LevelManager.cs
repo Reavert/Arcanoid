@@ -4,16 +4,16 @@ using System.Linq;
 using Assets.Models;
 using UnityEngine;
 
-public class LevelManager : MonoBehaviour
+public class LevelManager : Singleton<LevelManager>
 {
-    [SerializeField] private Block _blockPrefab;
+    [SerializeField] 
+    private Block _blockPrefab;
 
     [SerializeField] 
     [Range(0.0f, 1.0f)]
     private float _maxBlockOccupation;
 
     private List<Block> _blocks;
-    private ScreenHelper _screenHelper;
 
     public event Action Completed;
     public event Action Failed;
@@ -21,16 +21,24 @@ public class LevelManager : MonoBehaviour
     private Ball _ball;
     private Platform _platform;
 
-    void Awake()
+    protected override void Initialize()
     {
-        _screenHelper = FindObjectOfType<ScreenHelper>();
         _ball = FindObjectOfType<Ball>();
         _platform = FindObjectOfType<Platform>();
 
+        _blocks = new List<Block>();
+    }
+
+    private void OnEnable()
+    {
         Events.BlockDestroyed += OnBlockDestroyed;
         _ball.Fell += OnFell;
+    }
 
-        _blocks = new List<Block>();
+    private void OnDisable()
+    {
+        Events.BlockDestroyed -= OnBlockDestroyed;
+        _ball.Fell -= OnFell;
     }
 
     private void OnFell()
@@ -74,13 +82,13 @@ public class LevelManager : MonoBehaviour
         int rowsCount = blocks.GetLength(0);
         int columnsCount = blocks.GetLength(1);
 
-        float xStep = _screenHelper.ScreenDimension.x * 2.0f / columnsCount;
+        float xStep = ScreenHelper.Instance.ScreenDimension.x * 2.0f / columnsCount;
         float blockSize = xStep / 2.0f;
 
-        float maxSize = _screenHelper.ScreenDimension.x * _maxBlockOccupation;
+        float maxSize = ScreenHelper.Instance.ScreenDimension.x * _maxBlockOccupation;
         
         blockSize = Mathf.Clamp(blockSize, 0.0f, maxSize);
-        float remainingSpace = _screenHelper.ScreenDimension.x - blockSize * columnsCount;
+        float remainingSpace = ScreenHelper.Instance.ScreenDimension.x - blockSize * columnsCount;
 
         for (int row = 0; row < rowsCount; row++)
         {
@@ -92,8 +100,8 @@ public class LevelManager : MonoBehaviour
                 }
 
                 Block newBlock = Instantiate(_blockPrefab,
-                    new Vector3(column * (blockSize * 2f) - _screenHelper.ScreenDimension.x + blockSize + remainingSpace,
-                        -row * (blockSize * 2f) + _screenHelper.ScreenDimension.y - blockSize), Quaternion.identity);
+                    new Vector3(column * (blockSize * 2f) - ScreenHelper.Instance.ScreenDimension.x + blockSize + remainingSpace,
+                        -row * (blockSize * 2f) + ScreenHelper.Instance.ScreenDimension.y - blockSize), Quaternion.identity);
 
                 newBlock.transform.localScale = new Vector3(blockSize, blockSize, 1.0f);
                 newBlock.Condition = blocks[row, column] - 1;
@@ -101,11 +109,5 @@ public class LevelManager : MonoBehaviour
                 _blocks.Add(newBlock);
             }
         }
-    }
-
-    void OnDestroy()
-    {
-        Events.BlockDestroyed -= OnBlockDestroyed;
-        _ball.Fell -= OnFell;
     }
 }
